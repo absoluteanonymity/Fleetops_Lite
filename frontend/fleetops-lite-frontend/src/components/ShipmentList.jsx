@@ -1,18 +1,8 @@
-import { useEffect, useState } from 'react';
-
-export default function ShipmentList() {
-    const [shipments, setShipments] = useState([]);
-
-    useEffect(() => {
-        fetch('http://Localhost:5000/shipments')
-            .then((res) => res.json())
-            .then((data) => setShipments(data));
-    }, []);
-    
-
+export default function ShipmentList({ shipments }) {
     return (
         <div>
             <h2>Active Shipments</h2>
+            
             <table border="1" cellPadding="8">
                 <thead>
                     <tr>
@@ -21,6 +11,7 @@ export default function ShipmentList() {
                         <th>Driver</th>
                     </tr>
                 </thead>
+                
                 <tbody>
                     {shipments.map((s) => (
                         <tr key={s.id}>

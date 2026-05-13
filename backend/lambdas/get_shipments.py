@@ -1,24 +1,29 @@
 import json
 
 def lambda_handler(event, context):
-    return {
-        "StatusCode": 200,
-        "headers": {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*"
+    shipments = [
+        {
+            'id': 'Load-001',
+            'status': 'In Transit',
+            'driver': 'Unit 345'
         },
-        "body": json.dumps({
-            "shipments": [
-                {
-                    "id": "LOAD-1001",
-                    "status": "In Transit",
-                    "Driver": "Unit-379"
-                },
-                {
-                    "id": "LOAD-1002",
-                    "status": "Delivered",
-                    "Driver": "Unit-380"
-                }
-            ]
-        })
+        {
+            'id': 'Load-002',
+            'status': 'Delivered',
+            'driver': 'Unit 678'
+        },
+        {
+            'id': 'Load-003',
+            'status': 'Pending',
+            'driver': 'Unit 901'
+        }
+    ]
+
+    return {
+        'statusCode': 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        'body': json.dumps(shipments)
     }
+    
