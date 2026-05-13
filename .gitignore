@@ -1,0 +1,25 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+
+# Environment variables
+.env
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+
+# Build outputs
+dist/
+build/
+
+# IDE
+.vscode/
+
+# Logs
+*.log
