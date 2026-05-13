@@ -1,2 +1,2 @@
 # Fleetops_Lite
-AWS serverless fleet operations platform featuring secure authentication, scalable APIs, monitoring, and automated infrastructure deployment.
+A serverless fleet management platform designed to simulate real-world logistics operations using AWS cloud-native services.
