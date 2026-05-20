@@ -1,7 +1,7 @@
 # Fleetops_Lite
 A lightweight fleet management dashboard built with React and Flask.
 
-Built to strengthen hands-on experience with React, API's, backend integration, and application workflows.
+Built to strengthen hands-on experience with React, APIs, backend integration, and application workflows.
 
 ## Features
 - Vehicle dashboard UI
