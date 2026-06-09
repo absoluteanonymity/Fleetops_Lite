@@ -32,6 +32,11 @@ def create_shipment(data):
         "notes": data.get("notes", ""),
     }
 
+    table.put_item(Item=shipment)
+
+    return shipment
+
+
 def delete_shipment(shipment_id):
     table.delete_item(
         Key={
@@ -41,6 +46,42 @@ def delete_shipment(shipment_id):
 
     return shipment_id
 
-    table.put_item(Item=shipment)
 
-    return shipment
+def update_shipment(shipment_id, data):
+    updated_shipment = {
+        "shipment_id": shipment_id,
+        "status": data.get("status", "Pending"),
+        "origin": data.get("origin", ""),
+        "destination": data.get("destination", ""),
+        "carrier": data.get("carrier", ""),
+        "tracking_number": data.get("tracking_number", ""),
+        "notes": data.get("notes", ""),
+    }
+
+    table.update_item(
+        Key={
+            "shipment_id": shipment_id
+        },
+        UpdateExpression="""
+            SET #status = :status,
+                origin = :origin,
+                destination = :destination,
+                carrier = :carrier,
+                tracking_number = :tracking_number,
+                notes = :notes
+        """,
+        ExpressionAttributeNames={
+            "#status": "status"
+        },
+        ExpressionAttributeValues={
+            ":status": updated_shipment["status"],
+            ":origin": updated_shipment["origin"],
+            ":destination": updated_shipment["destination"],
+            ":carrier": updated_shipment["carrier"],
+            ":tracking_number": updated_shipment["tracking_number"],
+            ":notes": updated_shipment["notes"],
+        },
+        ReturnValues="ALL_NEW"
+    )
+
+    return updated_shipment

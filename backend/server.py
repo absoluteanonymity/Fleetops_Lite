@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
-from db import list_shipments, create_shipment, delete_shipment
+from db import list_shipments, create_shipment, delete_shipment, update_shipment
 
 
 app = Flask(__name__)
@@ -69,6 +69,28 @@ def remove_shipment(shipment_id):
             "details": str(error)
         }), 500
 
+@app.put("/shipments/<shipment_id>")
+def edit_shipment(shipment_id):
+    try:
+        data = request.get_json()
+
+        if not data:
+            return jsonify({
+                "error": "Missing JSON body"
+            }), 400
+
+        shipment = update_shipment(shipment_id, data)
+
+        return jsonify({
+            "message": "Shipment updated successfully",
+            "shipment": shipment
+        }), 200
+
+    except Exception as error:
+        return jsonify({
+            "error": "Failed to update shipment",
+            "details": str(error)
+        }), 500
 
 if __name__ == "__main__":
     app.run(debug=True)
