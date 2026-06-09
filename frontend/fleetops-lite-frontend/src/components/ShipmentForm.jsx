@@ -1,34 +1,48 @@
 import { useState } from "react";
 
 export default function ShipmentForm({ onShipmentCreated }) {
-  const [id, setId] = useState("");
-  const [status, setStatus] = useState("");
-  const [driver, setDriver] = useState("");
+  const [origin, setOrigin] = useState("");
+  const [destination, setDestination] = useState("");
+  const [carrier, setCarrier] = useState("");
+  const [trackingNumber, setTrackingNumber] = useState("");
+  const [status, setStatus] = useState("Pending");
+  const [notes, setNotes] = useState("");
 
   async function handleSubmit(e) {
     e.preventDefault();
 
     const shipment = {
-      id,
+      origin,
+      destination,
+      carrier,
+      tracking_number: trackingNumber,
       status,
-      driver
+      notes,
     };
 
     const response = await fetch("http://localhost:5000/shipments", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(shipment)
+      body: JSON.stringify(shipment),
     });
 
     const data = await response.json();
 
-    onShipmentCreated(data);
+    if (!response.ok) {
+      console.error("Failed to create shipment:", data);
+      return;
+    }
 
-    setId("");
-    setStatus("");
-    setDriver("");
+    onShipmentCreated(data.shipment);
+
+    setOrigin("");
+    setDestination("");
+    setCarrier("");
+    setTrackingNumber("");
+    setStatus("Pending");
+    setNotes("");
   }
 
   return (
@@ -36,9 +50,33 @@ export default function ShipmentForm({ onShipmentCreated }) {
       <h2>Create Shipment</h2>
 
       <input
-        placeholder="Shipment ID"
-        value={id}
-        onChange={(e) => setId(e.target.value)}
+        placeholder="Origin"
+        value={origin}
+        onChange={(e) => setOrigin(e.target.value)}
+      />
+
+      <br /><br />
+
+      <input
+        placeholder="Destination"
+        value={destination}
+        onChange={(e) => setDestination(e.target.value)}
+      />
+
+      <br /><br />
+
+      <input
+        placeholder="Carrier"
+        value={carrier}
+        onChange={(e) => setCarrier(e.target.value)}
+      />
+
+      <br /><br />
+
+      <input
+        placeholder="Tracking Number"
+        value={trackingNumber}
+        onChange={(e) => setTrackingNumber(e.target.value)}
       />
 
       <br /><br />
@@ -51,10 +89,10 @@ export default function ShipmentForm({ onShipmentCreated }) {
 
       <br /><br />
 
-      <input
-        placeholder="Driver"
-        value={driver}
-        onChange={(e) => setDriver(e.target.value)}
+      <textarea
+        placeholder="Notes"
+        value={notes}
+        onChange={(e) => setNotes(e.target.value)}
       />
 
       <br /><br />
