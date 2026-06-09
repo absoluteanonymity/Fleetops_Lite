@@ -152,10 +152,11 @@ node_modules/
 # Environment variables
 .env
 
+
 # Terraform
-.terraform/
-*.tfstate
-*.tfstate.*
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.backup
 
 # Build outputs
 dist/
