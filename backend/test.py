@@ -1,3 +1,11 @@
-from lambdas.get_shipments import lambda_handler
+import flask
+app = flask.Flask(__name__)
+    
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
 
-print(lambda_handler({}, {}))
+if __name__ == '__main__':
+    app.run(debug=True)
+
+    

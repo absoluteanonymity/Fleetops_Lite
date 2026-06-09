@@ -1,31 +1,74 @@
-from flask import Flask, request
+from flask import Flask, jsonify, request
 from flask_cors import CORS
-import json
 
-from lambdas.get_shipments import lambda_handler
-from lambdas.create_shipment import lambda_handler as create_lambda
+from db import list_shipments, create_shipment, delete_shipment
+
 
 app = Flask(__name__)
 CORS(app)
 
-@app.route("/")
+
+@app.get("/")
 def home():
-   return {"status": "Fleetops Lite API Online"}
+    return jsonify({
+        "message": "FleetOps Lite backend running"
+    }), 200
 
-@app.route("/shipments", methods=["GET"])
-def shipments():
-  response = lambda_handler({}, {})
-  return json.loads(response["body"])
 
-@app.route("/shipments", methods=["POST"])
-def create_shipment():
-  event = {
-     "body": json.dumps(request.json)
-  }
+@app.get("/shipments")
+def get_shipments():
+    try:
+        shipments = list_shipments()
 
-  response = create_lambda(event, {})
-  return json.loads(response["body"]), 201
+        return jsonify(shipments), 200
+
+    except Exception as error:
+        return jsonify({
+            "error": "Failed to fetch shipments",
+            "details": str(error)
+        }), 500
+
+
+@app.post("/shipments")
+def add_shipment():
+    try:
+        data = request.get_json()
+
+        if not data:
+            return jsonify({
+                "error": "Missing JSON body",
+            }), 400
+
+        shipment = create_shipment(data)
+
+        return jsonify({
+            "message": "Shipment created successfully",
+            "shipment": shipment
+        }), 201
+
+    except Exception as error:
+        return jsonify({
+            "error": "Failed to create shipment",
+            "details": str(error)
+        }), 500
+
+
+@app.delete("/shipments/<shipment_id>")
+def remove_shipment(shipment_id):
+    try:
+        delete_shipment(shipment_id)
+
+        return jsonify({
+            "message": "Shipment deleted successfully",
+            "shipment_id": shipment_id
+        }), 200
+
+    except Exception as error:
+        return jsonify({
+            "error": "Failed to delete shipment",
+            "details": str(error)
+        }), 500
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=True)

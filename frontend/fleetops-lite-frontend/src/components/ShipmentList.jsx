@@ -1,4 +1,4 @@
-export default function ShipmentList({ shipments }) {
+export default function ShipmentList({ shipments, onDeleteShipment }) {
     return (
         <div>
             <h2>Active Shipments</h2>
@@ -28,6 +28,11 @@ export default function ShipmentList({ shipments }) {
                                 <td>{s.carrier}</td>
                                 <td>{s.tracking_number}</td>
                                 <td>{s.notes}</td>
+                                <td>
+                                    <button onClick={() => onDeleteShipment(s.shipment_id)}>
+                                        Delete
+                                    </button>
+                                </td>
                             </tr>
                            ))} 
                         </tbody>

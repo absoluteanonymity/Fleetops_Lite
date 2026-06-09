@@ -32,6 +32,30 @@ export default function App() {
     setShipments((currentShipments) => [...currentShipments, newShipment]);
   }
 
+  async function handleDeleteShipment(shipmentId) {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/shipments/${shipmentId}`,
+        {
+          method: "DELETE",
+        }
+      );
+      
+      if (!response.ok) {
+        setError(data.error || "Failed to delete shipment");
+        console.error(data);
+        return;
+      }
+
+      setShipments((currentShipments) =>
+        currentShipments.filter((shipment) => shipment.shipment_id !== shipmentId)
+      );
+    } catch (err) {
+      setError("Could not connect to backend");
+      console.error(err);
+    } 
+  }
+
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
       <h1>FleetOps Lite</h1>
@@ -43,7 +67,9 @@ export default function App() {
 
       <hr />
 
-      <ShipmentList shipments={shipments} />
+      <ShipmentList 
+      shipments={shipments}
+      onDeleteShipment={handleDeleteShipment} />
     </div>
   );
 }
